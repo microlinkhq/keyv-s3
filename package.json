@@ -40,7 +40,6 @@
     "conventional-github-releaser": "latest",
     "coveralls": "latest",
     "delay": "latest",
-    "finepack": "latest",
     "git-authors-cli": "latest",
     "git-dirty": "latest",
     "got": "latest",
@@ -61,7 +60,7 @@
   ],
   "scripts": {
     "clean": "rm -rf node_modules",
-    "contributors": "(git-authors-cli && finepack && git add package.json && git commit -m 'build: contributors' --no-verify) || true",
+    "contributors": "(git-authors-cli && git add package.json && git commit -m 'build: contributors' --no-verify) || true",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "standard-markdown README.md && standard",
     "postrelease": "npm run release:tags && npm run release:github && ci-publish",
@@ -77,8 +76,8 @@
   "license": "MIT",
   "ava": {
     "files": [
-      "!test/util.js",
-      "test/*.js"
+      "test/*.js",
+      "!test/util.js"
     ],
     "serial": true
   },
