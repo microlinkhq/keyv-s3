@@ -6,7 +6,7 @@ const pReflect = require('p-reflect')
 const EventEmitter = require('events')
 const AWS = require('aws-sdk')
 
-class KeyvRedis extends EventEmitter {
+class KeyvS3 extends EventEmitter {
   constructor ({ namespace, ttl, ...opts }) {
     super()
     this.Bucket = namespace
@@ -71,4 +71,4 @@ class KeyvRedis extends EventEmitter {
   }
 }
 
-module.exports = KeyvRedis
+module.exports = KeyvS3
