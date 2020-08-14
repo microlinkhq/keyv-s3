@@ -14,7 +14,7 @@
 ## Install
 
 ```bash
-$ npm install keyv-s3 --save
+$ npm install aws-sdk keyv-s3 --save
 ```
 
 ## License
