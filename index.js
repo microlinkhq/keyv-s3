@@ -7,9 +7,10 @@ const EventEmitter = require('events')
 const AWS = require('aws-sdk')
 
 class KeyvRedis extends EventEmitter {
-  constructor (opts) {
+  constructor ({ namespace, ttl, ...opts }) {
     super()
-    this.Bucket = opts.bucket
+    this.Bucket = namespace
+    this.ttl = ttl
     this.s3 = new AWS.S3(opts)
   }
 
@@ -34,7 +35,7 @@ class KeyvRedis extends EventEmitter {
     return isExpired ? undefined : value.Body
   }
 
-  async set (Key, Body, ttl, opts) {
+  async set (Key, Body, ttl = this.ttl, opts) {
     const Expires = ttl ? addMilliseconds(new Date(), ttl) : undefined
     const { reason, isRejected } = await pReflect(
       this.s3
