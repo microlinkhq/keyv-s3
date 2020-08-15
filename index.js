@@ -41,10 +41,7 @@ class KeyvS3 extends EventEmitter {
 
     const isExpired = expires ? Date.now() > expires : true
 
-    if (isExpired) {
-      await this.delete(key)
-      return undefined
-    }
+    if (isExpired) return undefined
 
     return body
   }
