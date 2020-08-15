@@ -19,9 +19,9 @@ class KeyvS3 extends EventEmitter {
     return new URL(`${key}.json`, `https://${this.Bucket}`).toString()
   }
 
-  async get (Key) {
+  async get (key) {
     const { value, reason, isRejected } = await pReflect(
-      got(this.fileUrl(Key), {
+      got(this.fileUrl(key), {
         responseType: 'json'
       })
     )
@@ -42,22 +42,22 @@ class KeyvS3 extends EventEmitter {
     const isExpired = expires ? Date.now() > expires : true
 
     if (isExpired) {
-      await this.delete(Key)
+      await this.delete(key)
       return undefined
     }
 
     return body
   }
 
-  async set (Key, Body, ttl = this.ttl, opts) {
+  async set (key, value, ttl = this.ttl, opts) {
     if (!ttl) throw new TypeError('ttl is mandatory.')
 
     const Expires = ttl ? addMilliseconds(new Date(), ttl) : undefined
     const { reason, isRejected } = await pReflect(
       this.s3
         .putObject({
-          Key: `${Key}.json`,
-          Body: JSON.stringify(Body, null, 2),
+          Key: `${key}.json`,
+          Body: JSON.stringify(value, null, 2),
           ContentType: 'application/json',
           Bucket: this.Bucket,
           ACL: 'public-read',
