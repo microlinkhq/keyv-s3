@@ -2,14 +2,14 @@
 
 const test = require('ava')
 
-const { keyvS3 } = require('./util')
+const keyvS3 = require('.')
 
 test.serial.before(async () => {
   await Promise.all([keyvS3.delete('foo')])
 })
 
 test('if key exists, returns true', async t => {
-  await keyvS3.set('foo', 'bar')
+  await keyvS3.set('foo', 'bar', 100)
   t.is(await keyvS3.delete('foo'), true)
 })
 

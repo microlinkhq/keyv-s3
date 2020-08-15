@@ -75,7 +75,7 @@
   "ava": {
     "files": [
       "test/*.js",
-      "!test/util.js"
+      "!test/index.js"
     ],
     "serial": true
   },

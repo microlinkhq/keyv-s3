@@ -3,7 +3,7 @@
 const delay = require('delay')
 const test = require('ava')
 
-const { keyvS3 } = require('./util')
+const keyvS3 = require('.')
 
 test.serial.before(async () => {
   await Promise.all([
@@ -18,8 +18,12 @@ test("if key doesn't exist, returns undefined", async t => {
 })
 
 test('if key exists, returns the value', async t => {
-  await keyvS3.set('foo2', 'bar2')
-  t.is((await keyvS3.get('foo2')).toString(), 'bar2')
+  const key = 'foo2'
+  const value = 'bar2'
+  const ttl = 1000
+
+  await keyvS3.set(key, value, ttl)
+  t.is(await keyvS3.get(key), value)
 })
 
 test('if key expires, returns undefined', async t => {

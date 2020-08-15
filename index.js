@@ -1,10 +1,11 @@
 'use strict'
 
-const addMilliseconds = require('date-fns/addMilliseconds')
+const { addMilliseconds } = require('date-fns')
 const getTime = require('date-fns/getTime')
 const pReflect = require('p-reflect')
 const EventEmitter = require('events')
 const AWS = require('aws-sdk')
+const got = require('got')
 
 class KeyvS3 extends EventEmitter {
   constructor ({ namespace, ttl, ...opts }) {
@@ -14,34 +15,50 @@ class KeyvS3 extends EventEmitter {
     this.s3 = new AWS.S3(opts)
   }
 
-  async get (Key, opts) {
+  fileUrl (key) {
+    return new URL(`${key}.json`, `https://${this.Bucket}`).toString()
+  }
+
+  async get (Key) {
     const { value, reason, isRejected } = await pReflect(
-      this.s3
-        .getObject({
-          Key,
-          Bucket: this.Bucket,
-          ...opts
-        })
-        .promise()
+      got(this.fileUrl(Key), {
+        responseType: 'json'
+      })
     )
 
     if (isRejected) {
-      if (reason.code === 'NoSuchKey') return undefined
+      if (reason.response.statusCode === 403) return undefined
       throw reason
     }
 
-    if (!value.Expires) return value.Body
-    const isExpired = getTime(value.LastModified) > getTime(value.Expires)
-    return isExpired ? undefined : value.Body
+    const { statusCode, headers, body } = value
+
+    if (statusCode !== 200) return undefined
+
+    const expires = headers.expires
+      ? getTime(new Date(headers.expires))
+      : undefined
+
+    const isExpired = expires ? Date.now() > expires : true
+
+    if (isExpired) {
+      await this.delete(Key)
+      return undefined
+    }
+
+    return body
   }
 
   async set (Key, Body, ttl = this.ttl, opts) {
+    if (!ttl) throw new TypeError('ttl is mandatory.')
+
     const Expires = ttl ? addMilliseconds(new Date(), ttl) : undefined
     const { reason, isRejected } = await pReflect(
       this.s3
         .putObject({
-          Key,
-          Body,
+          Key: `${Key}.json`,
+          Body: JSON.stringify(Body, null, 2),
+          ContentType: 'application/json',
           Bucket: this.Bucket,
           ACL: 'public-read',
           Expires,
