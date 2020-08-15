@@ -14,7 +14,7 @@ test.serial.before(async () => {
 })
 
 test("if key doesn't exist, returns undefined", async t => {
-  t.is(await keyvS3.get('foo'), undefined)
+  t.is(await keyvS3.get(Date.now()), undefined)
 })
 
 test('if key exists, returns the value', async t => {
