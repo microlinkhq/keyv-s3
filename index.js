@@ -49,7 +49,8 @@ class KeyvS3 extends EventEmitter {
   async set (key, value, ttl = this.ttl, opts) {
     if (!ttl) throw new TypeError('ttl is mandatory.')
 
-    const Expires = ttl ? addMilliseconds(new Date(), ttl) : undefined
+    const Expires = addMilliseconds(new Date(), ttl)
+
     const { reason, isRejected } = await pReflect(
       this.s3
         .putObject({
