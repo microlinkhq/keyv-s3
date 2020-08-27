@@ -27,7 +27,10 @@ class KeyvS3 extends EventEmitter {
     )
 
     if (isRejected) {
-      if (reason.response.statusCode === 403) return undefined
+      if (reason.response && reason.response.statusCode === 403) {
+        return undefined
+      }
+
       throw reason
     }
 
