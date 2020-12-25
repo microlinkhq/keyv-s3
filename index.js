@@ -1,9 +1,8 @@
 'use strict'
 
-const { addMilliseconds } = require('date-fns')
-const getTime = require('date-fns/getTime')
-const pReflect = require('p-reflect')
+const { addMilliseconds, getTime } = require('date-fns')
 const EventEmitter = require('events')
+const pReflect = require('p-reflect')
 const AWS = require('aws-sdk')
 const got = require('got')
 
