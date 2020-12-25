@@ -13,6 +13,10 @@ class KeyvS3 extends EventEmitter {
     this.Bucket = namespace
     this.ttl = ttl
     this.s3 = new AWS.S3(opts)
+    this.got = got.extend({
+      retry: opts.maxRetries,
+      timeout: opts.httpOptions ? opts.httpOptions.timeout : undefined
+    })
   }
 
   fileUrl (key) {
@@ -21,14 +25,16 @@ class KeyvS3 extends EventEmitter {
 
   async get (key) {
     const { value, reason, isRejected } = await pReflect(
-      got(this.fileUrl(key), {
+      this.got(this.fileUrl(key), {
         responseType: 'json'
       })
     )
 
     if (isRejected) {
-      if (reason.response && reason.response.statusCode === 403) {
-        return undefined
+      if (reason.response) {
+        if ([403, 520].includes(reason.response.statusCode)) {
+          return undefined
+        }
       }
 
       throw reason
