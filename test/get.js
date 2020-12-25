@@ -20,7 +20,7 @@ test("if key doesn't exist, returns undefined", async t => {
 test('if key exists, returns the value', async t => {
   const key = 'foo2'
   const value = 'bar2'
-  const ttl = 1000
+  const ttl = 5000
 
   await keyvS3.set(key, value, ttl)
   t.is(await keyvS3.get(key), value)
