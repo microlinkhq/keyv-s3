@@ -7,12 +7,13 @@ const AWS = require('aws-sdk')
 const got = require('got')
 
 class KeyvS3 extends EventEmitter {
-  constructor ({ namespace, ttl, ...opts }) {
+  constructor ({ namespace, ttl, gotOpts, ...opts }) {
     super()
     this.Bucket = namespace
     this.ttl = ttl
     this.s3 = new AWS.S3(opts)
     this.got = got.extend({
+      ...gotOpts,
       retry: opts.maxRetries,
       timeout: opts.httpOptions ? opts.httpOptions.timeout : undefined
     })
