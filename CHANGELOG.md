@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/microlinkhq/keyv-s3/compare/v1.1.1...v1.1.2) (2021-01-02)
+
+
+### Bug Fixes
+
+* handle 530 status code ([00b1dd8](https://github.com/microlinkhq/keyv-s3/commit/00b1dd8f3c3e87ef719d772d3cca7d22e711a0e1))
+
 ### [1.1.1](https://github.com/microlinkhq/keyv-s3/compare/v1.1.0...v1.1.1) (2021-01-01)
 
 ## [1.1.0](https://github.com/microlinkhq/keyv-s3/compare/v1.0.10...v1.1.0) (2020-12-25)
