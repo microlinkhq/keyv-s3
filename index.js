@@ -32,7 +32,7 @@ class KeyvS3 extends EventEmitter {
 
     if (isRejected) {
       if (reason.response) {
-        if ([403, 520].includes(reason.response.statusCode)) {
+        if ([403, 520, 530].includes(reason.response.statusCode)) {
           return undefined
         }
       }
