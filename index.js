@@ -1,17 +1,22 @@
 'use strict'
 
+const {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand
+} = require('@aws-sdk/client-s3')
 const { addMilliseconds, getTime } = require('date-fns')
 const EventEmitter = require('events')
 const pReflect = require('p-reflect')
-const AWS = require('aws-sdk')
+
 const got = require('got')
 
 class KeyvS3 extends EventEmitter {
-  constructor ({ namespace, ttl, gotOpts, ...opts }) {
+  constructor ({ namespace, ttl, gotOpts, s3client, ...opts }) {
     super()
     this.Bucket = namespace
     this.ttl = ttl
-    this.s3 = new AWS.S3(opts)
+    this.s3client = s3client || new S3Client(opts)
     this.got = got.extend({
       ...gotOpts,
       retry: opts.maxRetries,
@@ -61,8 +66,8 @@ class KeyvS3 extends EventEmitter {
     const Expires = addMilliseconds(new Date(), ttl)
 
     const { reason, isRejected } = await pReflect(
-      this.s3
-        .putObject({
+      this.s3client.send(
+        new PutObjectCommand({
           Key: `${key}.json`,
           Body: JSON.stringify(value, null, 2),
           ContentType: 'application/json',
@@ -71,7 +76,7 @@ class KeyvS3 extends EventEmitter {
           Expires,
           ...opts
         })
-        .promise()
+      )
     )
 
     if (isRejected) throw reason
@@ -80,13 +85,13 @@ class KeyvS3 extends EventEmitter {
 
   async delete (Key, opts) {
     const { isRejected, reason } = await pReflect(
-      this.s3
-        .deleteObject({
+      this.s3client.send(
+        new DeleteObjectCommand({
           Key,
           Bucket: this.Bucket,
           ...opts
         })
-        .promise()
+      )
     )
 
     if (isRejected) throw reason
