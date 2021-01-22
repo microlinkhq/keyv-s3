@@ -33,7 +33,7 @@
     "@commitlint/cli": "latest",
     "@commitlint/config-conventional": "latest",
     "ava": "latest",
-    "aws-sdk/client-s3": "latest",
+    "@aws-sdk/client-s3": "latest",
     "ci-publish": "latest",
     "conventional-github-releaser": "latest",
     "coveralls": "latest",
