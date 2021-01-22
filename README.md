@@ -5,8 +5,6 @@
 ![Last version](https://img.shields.io/github/tag/microlinkhq/keyv-s3.svg?style=flat-square)
 [![Build Status](https://img.shields.io/travis/com/microlinkhq/keyv-s3/master.svg?style=flat-square)](https://travis-ci.com/microlinkhq/keyv-s3)
 [![Coverage Status](https://img.shields.io/coveralls/microlinkhq/keyv-s3.svg?style=flat-square)](https://coveralls.io/github/microlinkhq/keyv-s3)
-[![Dependency status](https://img.shields.io/david/microlinkhq/keyv-s3.svg?style=flat-square)](https://david-dm.org/microlinkhq/keyv-s3)
-[![Dev Dependencies Status](https://img.shields.io/david/dev/microlinkhq/keyv-s3.svg?style=flat-square)](https://david-dm.org/microlinkhq/keyv-s3#info=devDependencies)
 [![NPM Status](https://img.shields.io/npm/dm/keyv-s3.svg?style=flat-square)](https://www.npmjs.org/package/keyv-s3)
 
 > [Amazon S3](https://aws.amazon.com/s3) storage adapter for [Keyv](https://github.com/lukechilds/keyv).
@@ -17,7 +15,7 @@
 
 Until now, we delegate into [Redis](https://github.com/lukechilds/keyv-redis) for serving the cache layer because it's fast; However, it's also expensive when you have a certain size.
 
-The service is serving [+5M API calls per month](http://analytics.microlink.io), where every request is creating a cache entry; That means running out of space could be done relatively fast.
+The service is serving [more than 8 millions API calls per month](http://analytics.microlink.io), where every request is creating a cache entry; That means running out of space could be done relatively fast.
 
 We wanted a cache layer that met the following premises:
 
@@ -30,7 +28,7 @@ Knowing what we wanted, and keeping in mind [Microlink API](https://microlink.io
 ## Install
 
 ```bash
-$ npm install aws-sdk keyv-s3 --save
+$ npm install keyv @aws-sdk/client-s3 keyv-s3 --save
 ```
 
 ## Usage
@@ -52,6 +50,21 @@ Also, CloudFlare gives us an extra perfomance boost since it's on top of the Buc
 In case you are using CloudFlare as well, we have the following page rule associated:
 
 ![](https://i.imgur.com/dANGotv.png)
+
+Now you can connect with your S3 caching layer from code:
+
+```js
+const KeyvS3 = require('keyv-s3')
+
+const keyvS3 = new KeyvS3({
+  region: 'us-east-1',
+  namespace: 'c.microlink.io',
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+})
+```
+
+You can interact with `keyvS3` using [keyv instance methods](https://github.com/lukechilds/keyv#instance).
 
 ## License
 
