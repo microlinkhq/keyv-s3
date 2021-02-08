@@ -10,8 +10,14 @@
     "url": "https://microlink.io"
   },
   "contributors": [
-    "Kiko Beats <josefrancisco.verdu@gmail.com>",
-    "Keyvan Akbary <me@keyvanakbary.com>"
+    {
+      "name": "Kiko Beats",
+      "email": "josefrancisco.verdu@gmail.com"
+    },
+    {
+      "name": "Keyvan Akbary",
+      "email": "me@keyvanakbary.com"
+    }
   ],
   "repository": {
     "type": "git",
@@ -30,14 +36,15 @@
     "p-reflect": "~2.1.0"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "latest",
     "@commitlint/cli": "latest",
     "@commitlint/config-conventional": "latest",
     "ava": "latest",
-    "@aws-sdk/client-s3": "latest",
     "ci-publish": "latest",
     "conventional-github-releaser": "latest",
     "coveralls": "latest",
     "delay": "latest",
+    "finepack": "latest",
     "git-authors-cli": "latest",
     "git-dirty": "latest",
     "got": "latest",
@@ -58,10 +65,10 @@
   ],
   "scripts": {
     "clean": "rm -rf node_modules",
-    "contributors": "(git-authors-cli && git add package.json && git commit -m 'build: contributors' --no-verify) || true",
+    "contributors": "(git-authors-cli && finepack && git add package.json && git commit -m 'build: contributors' --no-verify) || true",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "standard-markdown README.md && standard",
-    "postrelease": "npm run release:tags && npm run release:github && ci-publish",
+    "postrelease": "npm run release:tags && npm run release:github && (ci-publish || npm publish --access=public)",
     "prerelease": "npm run update:check && npm run contributors",
     "pretest": "npm run lint",
     "release": "standard-version -a",
@@ -74,8 +81,8 @@
   "license": "MIT",
   "ava": {
     "files": [
-      "test/*.js",
-      "!test/index.js"
+      "!test/index.js",
+      "test/*.js"
     ],
     "serial": true
   },
@@ -96,6 +103,9 @@
     ],
     "*.md": [
       "standard-markdown"
+    ],
+    "package.json": [
+      "finepack"
     ]
   }
 }
