@@ -5,7 +5,7 @@ const {
   PutObjectCommand,
   DeleteObjectCommand
 } = require('@aws-sdk/client-s3')
-const { addMilliseconds, getTime } = require('date-fns')
+
 const EventEmitter = require('events')
 const pReflect = require('p-reflect')
 
@@ -50,7 +50,7 @@ class KeyvS3 extends EventEmitter {
     if (statusCode !== 200) return undefined
 
     const expires = headers.expires
-      ? getTime(new Date(headers.expires))
+      ? new Date(headers.expires).getTime()
       : undefined
 
     const isExpired = expires ? Date.now() > expires : true
@@ -63,7 +63,7 @@ class KeyvS3 extends EventEmitter {
   async set (key, value, ttl = this.ttl, opts) {
     if (!ttl) throw new TypeError('ttl is mandatory.')
 
-    const Expires = addMilliseconds(new Date(), ttl)
+    const Expires = new Date(new Date().getTime() + ttl)
 
     const { reason, isRejected } = await pReflect(
       this.s3client.send(
