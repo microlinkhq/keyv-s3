@@ -32,7 +32,7 @@
     "s3"
   ],
   "dependencies": {
-    "date-fns": "~2.17.0",
+    "date-fns": "~2.18.0",
     "p-reflect": "~2.1.0"
   },
   "devDependencies": {
