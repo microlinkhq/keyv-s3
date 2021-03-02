@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/microlinkhq/keyv-s3/compare/v1.2.2...v1.3.0) (2021-03-02)
+
+
+### Features
+
+* remove date-fns dependency ([b729a24](https://github.com/microlinkhq/keyv-s3/commit/b729a24063b0f6ef87509fa0dd7fa93612ba45f0))
+
 ### [1.2.2](https://github.com/microlinkhq/keyv-s3/compare/v1.2.1...v1.2.2) (2021-02-08)
 
 ### [1.2.1](https://github.com/microlinkhq/keyv-s3/compare/v1.2.0...v1.2.1) (2021-01-22)
