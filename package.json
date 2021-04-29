@@ -32,7 +32,7 @@
     "s3"
   ],
   "dependencies": {
-    "p-reflect": "~2.1.0"
+    "p-reflect": "~3.0.0"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "latest",
