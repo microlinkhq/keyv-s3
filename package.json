@@ -41,17 +41,15 @@
     "ava": "latest",
     "ci-publish": "latest",
     "conventional-github-releaser": "latest",
-    "coveralls": "latest",
     "delay": "latest",
     "finepack": "latest",
     "git-authors-cli": "latest",
-    "git-dirty": "latest",
     "got": "latest",
-    "husky": "latest",
     "lint-staged": "latest",
     "npm-check-updates": "latest",
     "nyc": "latest",
     "prettier-standard": "latest",
+    "simple-git-hooks": "latest",
     "standard": "latest",
     "standard-markdown": "latest",
     "standard-version": "latest"
@@ -80,8 +78,8 @@
   "license": "MIT",
   "ava": {
     "files": [
-      "!test/index.js",
-      "test/*.js"
+      "test/*.js",
+      "!test/index.js"
     ],
     "serial": true
   },
@@ -90,21 +88,19 @@
       "@commitlint/config-conventional"
     ]
   },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
+  "simple-git-hooks": {
+    "commit-msg": "npx commitlint --edit",
+    "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "*.js": [
+    "package.json": [
+      "finepack --sort-ignore-object-at ava"
+    ],
+    "*.js,!*.min.js,": [
       "prettier-standard"
     ],
     "*.md": [
       "standard-markdown"
-    ],
-    "package.json": [
-      "finepack"
     ]
   }
 }
