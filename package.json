@@ -74,8 +74,8 @@
   "license": "MIT",
   "ava": {
     "files": [
-      "test/*.js",
-      "!test/index.js"
+      "!test/index.js",
+      "test/*.js"
     ],
     "serial": true
   },
