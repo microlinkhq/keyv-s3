@@ -13,10 +13,6 @@
     {
       "name": "Kiko Beats",
       "email": "josefrancisco.verdu@gmail.com"
-    },
-    {
-      "name": "Keyvan Akbary",
-      "email": "me@keyvanakbary.com"
     }
   ],
   "repository": {
@@ -78,8 +74,8 @@
   "license": "MIT",
   "ava": {
     "files": [
-      "test/*.js",
-      "!test/index.js"
+      "!test/index.js",
+      "test/*.js"
     ],
     "serial": true
   },
@@ -87,10 +83,6 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
-  },
-  "simple-git-hooks": {
-    "commit-msg": "npx commitlint --edit",
-    "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
     "package.json": [
@@ -102,5 +94,9 @@
     "*.md": [
       "standard-markdown"
     ]
+  },
+  "simple-git-hooks": {
+    "commit-msg": "npx commitlint --edit",
+    "pre-commit": "npx lint-staged"
   }
 }
