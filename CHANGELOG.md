@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.4.0 (2021-07-19)
+
+
+### Features
+
+* add clear noop method ([05bdfae](https://github.com/microlinkhq/keyv-s3/commit/05bdfae253960fdabd3b0466096fb248b1fb8962))
+
 ### 1.3.3 (2021-07-14)
 
 ### 1.3.2 (2021-07-14)
