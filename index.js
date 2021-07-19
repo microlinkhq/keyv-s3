@@ -98,6 +98,8 @@ class KeyvS3 extends EventEmitter {
 
     return true
   }
+
+  clear () {}
 }
 
 module.exports = KeyvS3
