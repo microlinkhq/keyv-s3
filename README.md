@@ -1,5 +1,7 @@
 <div align="center">
-  <img src="https://cdn.microlink.io/logo/banner.png"">
+  <img src="https://cdn.microlink.io/logo/banner.png">
+  <br>
+  <br>
 </div>
 
 ![Last version](https://img.shields.io/github/tag/microlinkhq/keyv-s3.svg?style=flat-square)
