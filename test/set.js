@@ -4,7 +4,7 @@ const delay = require('delay')
 const test = require('ava')
 const got = require('got')
 
-const keyvS3 = require('.')
+const keyvS3 = require('./util')
 
 test.serial.before(async () => {
   await keyvS3.delete('foo')

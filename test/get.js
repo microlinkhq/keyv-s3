@@ -3,7 +3,7 @@
 const delay = require('delay')
 const test = require('ava')
 
-const keyvS3 = require('.')
+const keyvS3 = require('./util')
 
 test.serial.before(async () => {
   await Promise.all([
