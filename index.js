@@ -8,7 +8,6 @@ const {
 
 const EventEmitter = require('events')
 const pReflect = require('p-reflect')
-
 const got = require('got')
 
 class KeyvS3 extends EventEmitter {
@@ -22,6 +21,14 @@ class KeyvS3 extends EventEmitter {
       retry: opts.maxRetries,
       timeout: opts.httpOptions ? opts.httpOptions.timeout : undefined
     })
+  }
+
+  _getKeyPrefix (key) {
+    return key
+  }
+
+  _getKeyUnprefix (key) {
+    return key
   }
 
   fileUrl (key) {
