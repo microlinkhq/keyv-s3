@@ -5,7 +5,6 @@
 </div>
 
 ![Last version](https://img.shields.io/github/tag/microlinkhq/keyv-s3.svg?style=flat-square)
-[![Build Status](https://img.shields.io/travis/com/microlinkhq/keyv-s3/master.svg?style=flat-square)](https://travis-ci.com/microlinkhq/keyv-s3)
 [![Coverage Status](https://img.shields.io/coveralls/microlinkhq/keyv-s3.svg?style=flat-square)](https://coveralls.io/github/microlinkhq/keyv-s3)
 [![NPM Status](https://img.shields.io/npm/dm/keyv-s3.svg?style=flat-square)](https://www.npmjs.org/package/keyv-s3)
 
