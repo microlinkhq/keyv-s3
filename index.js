@@ -27,10 +27,6 @@ class KeyvS3 extends EventEmitter {
     return key
   }
 
-  _getKeyUnprefix (key) {
-    return key
-  }
-
   fileUrl (key) {
     return new URL(`${key}.json`, `https://${this.Bucket}`).toString()
   }
