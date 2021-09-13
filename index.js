@@ -23,12 +23,11 @@ class KeyvS3 extends EventEmitter {
     })
   }
 
-  _getKeyPrefix (key) {
-    return key
-  }
-
   fileUrl (key) {
-    return new URL(`${key}.json`, `https://${this.Bucket}`).toString()
+    return new URL(
+      `${key.toString().replace(`${this.Bucket}:`, '')}.json`,
+      `https://${this.Bucket}`
+    ).toString()
   }
 
   async get (key) {
