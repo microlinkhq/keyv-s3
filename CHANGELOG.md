@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.4.7 (2021-09-13)
+
+
+### Bug Fixes
+
+* remove _getKeyPrefix method ([984f7f2](https://github.com/microlinkhq/keyv-s3/commit/984f7f241ef672bf853975a5daa4967b8563be48))
+
 ### 1.4.6 (2021-09-12)
 
 ### 1.4.5 (2021-09-12)
