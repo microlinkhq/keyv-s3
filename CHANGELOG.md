@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.5.0 (2021-09-14)
+
+
+### Features
+
+* ttl is optional ([54d18bc](https://github.com/microlinkhq/keyv-s3/commit/54d18bc62b564ff0bf22def0e924f65ed4c1834a))
+
 ### 1.4.8 (2021-09-14)
 
 ### 1.4.7 (2021-09-13)
