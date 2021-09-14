@@ -29,7 +29,7 @@ Knowing what we wanted, and keeping in mind [Microlink API](https://microlink.io
 ## Install
 
 ```bash
-$ npm install @keyv/core @aws-sdk/client-s3 keyv-s3 --save
+$ npm install @keyvhq/core @aws-sdk/client-s3 keyv-s3 --save
 ```
 
 ## Usage
