@@ -63,10 +63,6 @@ class KeyvS3 extends EventEmitter {
   }
 
   async set (key, value, ttl = this.ttl, opts) {
-    if (!ttl) throw new TypeError('ttl is mandatory.')
-
-    const Expires = new Date(new Date().getTime() + ttl)
-
     const { reason, isRejected } = await pReflect(
       this.s3client.send(
         new PutObjectCommand({
@@ -75,7 +71,7 @@ class KeyvS3 extends EventEmitter {
           ContentType: 'application/json',
           Bucket: this.Bucket,
           ACL: 'public-read',
-          Expires,
+          Expires: ttl ? new Date(new Date().getTime() + ttl) : undefined,
           ...opts
         })
       )
