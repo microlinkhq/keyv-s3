@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.5.1 (2021-09-15)
+
+
+### Bug Fixes
+
+* get under no expiration ([48e6bd5](https://github.com/microlinkhq/keyv-s3/commit/48e6bd54d59aac0135f73ad00670fde7569e3c45))
+
 ## 1.5.0 (2021-09-14)
 
 

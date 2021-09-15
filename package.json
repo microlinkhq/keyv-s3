@@ -2,7 +2,7 @@
   "name": "keyv-s3",
   "description": "Amazon S3 storage adapter for Keyv",
   "homepage": "https://nicedoc.io/microlinkhq/keyv-s3",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "main": "index.js",
   "author": {
     "email": "hello@microlink.io",
