@@ -53,13 +53,9 @@ class KeyvS3 extends EventEmitter {
 
     const expires = headers.expires
       ? new Date(headers.expires).getTime()
-      : undefined
+      : Number.POSITIVE_INFINITY
 
-    const isExpired = expires ? Date.now() > expires : true
-
-    if (isExpired) return undefined
-
-    return body
+    return Date.now() <= expires ? body : undefined
   }
 
   async set (key, value, ttl = this.ttl, opts) {
