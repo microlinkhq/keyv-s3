@@ -23,16 +23,18 @@ class KeyvS3 extends EventEmitter {
     })
   }
 
-  fileUrl (key) {
-    return new URL(
-      `${key.toString().replace(`${this.Bucket}:`, '')}.json`,
-      `https://${this.Bucket}`
-    ).toString()
+  filename (key) {
+    const id = key.toString().replace(`${this.Bucket}:`, '')
+    return `${id}.json`
+  }
+
+  fileUrl (filename) {
+    return new URL(filename, `https://${this.Bucket}`).toString()
   }
 
   async get (key) {
     const { value, reason, isRejected } = await pReflect(
-      this.got(this.fileUrl(key), {
+      this.got(this.fileUrl(this.filename(key)), {
         responseType: 'json'
       })
     )
@@ -62,7 +64,7 @@ class KeyvS3 extends EventEmitter {
     const { reason, isRejected } = await pReflect(
       this.s3client.send(
         new PutObjectCommand({
-          Key: `${key}.json`,
+          Key: this.filename(key),
           Body: JSON.stringify(value, null, 2),
           ContentType: 'application/json',
           Bucket: this.Bucket,

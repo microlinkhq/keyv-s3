@@ -15,7 +15,9 @@ test('set with expiration', async t => {
   const ttl = 100
 
   t.is(await keyvS3.set(key, 'bar2', ttl), true)
-  const { headers } = await got.head(keyvS3.fileUrl(key))
+
+  const fileUrl = keyvS3.fileUrl(keyvS3.filename(key))
+  const { headers } = await got.head(fileUrl)
 
   t.is(!!headers.expires, true)
 
@@ -28,7 +30,9 @@ test('set with no expiration', async t => {
   const key = 'fooz'
 
   t.is(await keyvS3.set(key, 'bar2'), true)
-  const { headers } = await got.head(keyvS3.fileUrl(key))
+
+  const fileUrl = keyvS3.fileUrl(keyvS3.filename(key))
+  const { headers } = await got.head(fileUrl)
 
   t.is(!!headers.expires, false)
   t.is(await keyvS3.get(key), 'bar2')
