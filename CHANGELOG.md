@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.2](https://github.com/microlinkhq/keyv-s3/compare/v1.5.1...v1.5.2) (2021-09-18)
+
+
+### Bug Fixes
+
+* ensure unprefix key ([561c1a0](https://github.com/microlinkhq/keyv-s3/commit/561c1a0f5863f196507473812a2f372ad9999d3f))
+
 ### 1.5.1 (2021-09-15)
 
 
