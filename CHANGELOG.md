@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.5.3 (2021-12-07)
+
+
+### Bug Fixes
+
+* add missing dependency ([0599881](https://github.com/microlinkhq/keyv-s3/commit/05998818e758cd49eed62087a66265b0107e409f))
+
 ### [1.5.2](https://github.com/microlinkhq/keyv-s3/compare/v1.5.1...v1.5.2) (2021-09-18)
 
 
