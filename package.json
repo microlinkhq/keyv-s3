@@ -32,6 +32,7 @@
     "s3"
   ],
   "dependencies": {
+    "got": "~11.8.3",
     "p-reflect": "~2.1.0"
   },
   "devDependencies": {
@@ -44,7 +45,6 @@
     "delay": "latest",
     "finepack": "latest",
     "git-authors-cli": "latest",
-    "got": "latest",
     "nano-staged": "latest",
     "npm-check-updates": "latest",
     "nyc": "latest",
