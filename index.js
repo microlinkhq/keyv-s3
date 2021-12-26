@@ -18,8 +18,10 @@ class KeyvS3 extends EventEmitter {
     this.s3client = s3client || new S3Client(opts)
     this.got = got.extend({
       ...gotOpts,
-      retry: opts.maxRetries,
-      timeout: opts.httpOptions ? opts.httpOptions.timeout : undefined
+      retry: opts.maxAttempts,
+      timeout: opts.requestHandler
+        ? opts.requestHandler.socketTimeout
+        : undefined
     })
   }
 
