@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.5.4 (2021-12-27)
+
+
+### Bug Fixes
+
+* setup retry & timeout properly ([f7910b8](https://github.com/microlinkhq/keyv-s3/commit/f7910b835edd34700e81dda1ce7b34401be2c3c2))
+
 ### 1.5.3 (2021-12-07)
 
 
