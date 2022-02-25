@@ -35,7 +35,7 @@
     "@aws-sdk/client-s3": "latest",
     "@commitlint/cli": "latest",
     "@commitlint/config-conventional": "latest",
-    "ava": "3",
+    "ava": "4",
     "ci-publish": "latest",
     "conventional-github-releaser": "latest",
     "delay": "latest",
