@@ -73,6 +73,7 @@
   },
   "license": "MIT",
   "ava": {
+    "workerThreads": false,
     "files": [
       "test/*.js",
       "!test/util.js"
