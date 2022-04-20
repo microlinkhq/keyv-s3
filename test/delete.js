@@ -2,12 +2,16 @@
 
 const test = require('ava')
 
-const { keyvS3 } = require('./util')
+const { keyvB2, keyvS3 } = require('./util')
 
-;[{ keyv: keyvS3, provider: 'S3' }].forEach(({ provider, keyv }) => {
-  test.serial.before(async () => {
-    await Promise.all([keyv.delete('foo')])
-  })
+;[
+  { keyv: keyvS3, provider: 'AWS S3' },
+  { keyv: keyvB2, provider: 'Backblaze B2' }
+].forEach(({ provider, keyv }) => {
+  const cleanup = () => Promise.all([keyv.delete('foo')])
+
+  test.before(cleanup)
+  test.after.always(cleanup)
 
   test(`${provider} » if key exists, returns true`, async t => {
     await keyv.set('foo', 'bar', 100)
