@@ -3,32 +3,34 @@
 const delay = require('delay')
 const test = require('ava')
 
-const keyvS3 = require('./util')
+const { keyvS3 } = require('./util')
 
-test.serial.before(async () => {
-  await Promise.all([
-    keyvS3.delete('foo'),
-    keyvS3.delete('foo2'),
-    keyvS3.delete('foo3')
-  ])
-})
+;[{ keyv: keyvS3, provider: 'S3' }].forEach(({ provider, keyv }) => {
+  test.serial.before(async () => {
+    await Promise.all([
+      keyv.delete('foo'),
+      keyv.delete('foo2'),
+      keyv.delete('foo3')
+    ])
+  })
 
-test("if key doesn't exist, returns undefined", async t => {
-  t.is(await keyvS3.get(Date.now()), undefined)
-})
+  test(`${provider} » if key doesn't exist, returns undefined`, async t => {
+    t.is(await keyv.get(Date.now()), undefined)
+  })
 
-test('if key exists, returns the value', async t => {
-  const key = 'foo2'
-  const value = 'bar2'
-  const ttl = 5000
+  test(`${provider} » if key exists, returns the value`, async t => {
+    const key = 'foo2'
+    const value = 'bar2'
+    const ttl = 5000
 
-  await keyvS3.set(key, value, ttl)
-  t.is(await keyvS3.get(key), value)
-})
+    await keyv.set(key, value, ttl)
+    t.is(await keyv.get(key), value)
+  })
 
-test('if key expires, returns undefined', async t => {
-  const ttl = 100
-  await keyvS3.set('foo3', 'bar3', ttl)
-  await delay(ttl)
-  t.is(await keyvS3.get('foo3'), undefined)
+  test(`${provider} » if key expires, returns undefined`, async t => {
+    const ttl = 100
+    await keyv.set('foo3', 'bar3', ttl)
+    await delay(ttl)
+    t.is(await keyv.get('foo3'), undefined)
+  })
 })

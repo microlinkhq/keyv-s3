@@ -16,4 +16,4 @@ const s3client = new S3Client({
   }
 })
 
-module.exports = new KeyvS3({ namespace: S3_BUCKET_NAME, s3client })
+module.exports.keyvS3 = new KeyvS3({ namespace: S3_BUCKET_NAME, s3client })

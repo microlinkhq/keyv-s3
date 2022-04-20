@@ -2,17 +2,22 @@
 
 const test = require('ava')
 
-const keyvS3 = require('./util')
+const { keyvS3 } = require('./util')
 
-test.serial.before(async () => {
-  await Promise.all([keyvS3.delete('foo')])
-})
+;[{ keyv: keyvS3, provider: 'S3' }].forEach(({ provider, keyv }) => {
+  test.serial.before(async () => {
+    await Promise.all([keyv.delete('foo')])
+  })
 
-test('if key exists, returns true', async t => {
-  await keyvS3.set('foo', 'bar', 100)
-  t.is(await keyvS3.delete('foo'), true)
-})
+  test(`${provider} » if key exists, returns true`, async t => {
+    await keyv.set('foo', 'bar', 100)
+    t.is(await keyv.delete('foo'), true)
+  })
 
-test.skip("if key don't exist, returns false", async t => {
-  t.is(await keyvS3.delete('notexistkey'), false)
+  // this tests is skipped `DeleteObjectCommand` doesn't return
+  // information related with file presence and check for a file
+  // before delete it is expensive
+  test.skip(`${provider} » if key don't exist, returns false`, async t => {
+    t.is(await keyv.delete('notexistkey'), false)
+  })
 })
