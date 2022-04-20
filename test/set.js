@@ -4,36 +4,42 @@ const delay = require('delay')
 const test = require('ava')
 const got = require('got')
 
-const keyvS3 = require('./util')
+const { keyvB2, keyvS3 } = require('./util')
 
-test.serial.before(() =>
-  Promise.all([keyvS3.delete('foo'), keyvS3.delete('fooz')])
-)
+;[
+  { keyv: keyvS3, provider: 'AWS S3' },
+  { keyv: keyvB2, provider: 'Backblaze B2' }
+].forEach(({ provider, keyv }) => {
+  const cleanup = () => Promise.all([keyv.delete('foo'), keyv.delete('fooz')])
 
-test('set with expiration', async t => {
-  const key = 'foo'
-  const ttl = 100
+  test.before(cleanup)
+  test.after.always(cleanup)
 
-  t.is(await keyvS3.set(key, 'bar2', ttl), true)
+  test(`${provider} » set with expiration`, async t => {
+    const key = 'foo'
+    const ttl = 100
 
-  const fileUrl = keyvS3.fileUrl(keyvS3.filename(key))
-  const { headers } = await got.head(fileUrl)
+    t.is(await keyv.set(key, 'bar2', ttl), true)
 
-  t.is(!!headers.expires, true)
+    const fileUrl = keyv.fileUrl(keyv.filename(key))
+    const { headers } = await got.head(fileUrl)
 
-  await delay(ttl)
+    t.is(!!headers.expires, true)
 
-  t.is(await keyvS3.get(key), undefined)
-})
+    await delay(ttl)
 
-test('set with no expiration', async t => {
-  const key = 'fooz'
+    t.is(await keyv.get(key), undefined)
+  })
 
-  t.is(await keyvS3.set(key, 'bar2'), true)
+  test(`${provider} » set with no expiration`, async t => {
+    const key = 'fooz'
 
-  const fileUrl = keyvS3.fileUrl(keyvS3.filename(key))
-  const { headers } = await got.head(fileUrl)
+    t.is(await keyv.set(key, 'bar2'), true)
 
-  t.is(!!headers.expires, false)
-  t.is(await keyvS3.get(key), 'bar2')
+    const fileUrl = keyv.fileUrl(keyv.filename(key))
+    const { headers } = await got.head(fileUrl)
+
+    t.is(!!headers.expires, false)
+    t.is(await keyv.get(key), 'bar2')
+  })
 })

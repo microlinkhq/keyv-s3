@@ -65,7 +65,29 @@ const keyvS3 = new KeyvS3({
 })
 ```
 
-You can interact with `keyvS3` using [keyv instance methods](https://github.com/lukechilds/keyv#instance).
+You can interact with `keyvS3` using [keyv instance methods](https://keyv.js.org).
+
+## Backblaze B2 support
+
+For using [Backblaze B2](https://www.backblaze.com/b2/cloud-storage.html) as provider, you have to provide `s3client` with Blackbaze B2 endpoint.
+
+Also, since Backblaze B2 buckets name doesn't allow a dot, you should to specify the `hostname` to be used for mapping the bucket:
+
+```js
+const keyvS3 = new KeyvS3({
+  region: 'us-east-1',
+  namespace: 'c-microlink-io',
+  hostname: 'c.microlink.io',
+  s3client: new S3Client({
+    region: process.env.B2_REGION,
+    endpoint: `https://s3.${process.env.B2_REGION}.backblazeb2.com`,
+    credentials: {
+      accessKeyId: process.env.B2_ACCESS_KEY_ID,
+      secretAccessKey: process.env.B2_SECRET_ACCESS_KEY
+    }
+  })
+})
+```
 
 ## License
 

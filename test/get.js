@@ -3,32 +3,35 @@
 const delay = require('delay')
 const test = require('ava')
 
-const keyvS3 = require('./util')
+const { keyvB2, keyvS3 } = require('./util')
 
-test.serial.before(async () => {
-  await Promise.all([
-    keyvS3.delete('foo'),
-    keyvS3.delete('foo2'),
-    keyvS3.delete('foo3')
-  ])
-})
+;[
+  { keyv: keyvS3, provider: 'AWS S3' },
+  { keyv: keyvB2, provider: 'Backblaze B2' }
+].forEach(({ provider, keyv }) => {
+  const cleanup = () =>
+    Promise.all([keyv.delete('foo'), keyv.delete('foo2'), keyv.delete('foo3')])
 
-test("if key doesn't exist, returns undefined", async t => {
-  t.is(await keyvS3.get(Date.now()), undefined)
-})
+  test.before(cleanup)
+  test.after.always(cleanup)
 
-test('if key exists, returns the value', async t => {
-  const key = 'foo2'
-  const value = 'bar2'
-  const ttl = 5000
+  test(`${provider} » if key doesn't exist, returns undefined`, async t => {
+    t.is(await keyv.get(Date.now()), undefined)
+  })
 
-  await keyvS3.set(key, value, ttl)
-  t.is(await keyvS3.get(key), value)
-})
+  test(`${provider} » if key exists, returns the value`, async t => {
+    const key = 'foo2'
+    const value = 'bar2'
+    const ttl = 5000
 
-test('if key expires, returns undefined', async t => {
-  const ttl = 100
-  await keyvS3.set('foo3', 'bar3', ttl)
-  await delay(ttl)
-  t.is(await keyvS3.get('foo3'), undefined)
+    await keyv.set(key, value, ttl)
+    t.is(await keyv.get(key), value)
+  })
+
+  test(`${provider} » if key expires, returns undefined`, async t => {
+    const ttl = 100
+    await keyv.set('foo3', 'bar3', ttl)
+    await delay(ttl)
+    t.is(await keyv.get('foo3'), undefined)
+  })
 })

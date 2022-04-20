@@ -11,10 +11,11 @@ const pReflect = require('p-reflect')
 const got = require('got')
 
 class KeyvS3 extends EventEmitter {
-  constructor ({ namespace, ttl, gotOpts, s3client, ...opts }) {
+  constructor ({ namespace, hostname, ttl, gotOpts, s3client, ...opts }) {
     super()
     this.Bucket = namespace
     this.ttl = ttl
+    this.hostname = hostname || namespace
     this.s3client = s3client || new S3Client(opts)
     this.got = got.extend({
       ...gotOpts,
@@ -31,7 +32,7 @@ class KeyvS3 extends EventEmitter {
   }
 
   fileUrl (filename) {
-    return new URL(filename, `https://${this.Bucket}`).toString()
+    return new URL(filename, `https://${this.hostname}`).toString()
   }
 
   async get (key) {
@@ -43,7 +44,7 @@ class KeyvS3 extends EventEmitter {
 
     if (isRejected) {
       if (reason.response) {
-        if ([403, 520, 530].includes(reason.response.statusCode)) {
+        if ([403, 404, 520, 530].includes(reason.response.statusCode)) {
           return undefined
         }
       }
@@ -81,11 +82,11 @@ class KeyvS3 extends EventEmitter {
     return true
   }
 
-  async delete (Key, opts) {
+  async delete (key, opts) {
     const { isRejected, reason } = await pReflect(
       this.s3client.send(
         new DeleteObjectCommand({
-          Key,
+          Key: this.filename(key),
           Bucket: this.Bucket,
           ...opts
         })
@@ -93,7 +94,6 @@ class KeyvS3 extends EventEmitter {
     )
 
     if (isRejected) throw reason
-
     return true
   }
 }
