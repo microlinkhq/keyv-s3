@@ -8,22 +8,21 @@ const {
 
 const EventEmitter = require('events')
 const pReflect = require('p-reflect')
-const got = require('got')
 
 class KeyvS3 extends EventEmitter {
-  constructor ({ namespace, hostname, ttl, gotOpts, s3client, ...opts }) {
+  constructor ({ namespace, hostname, ttl, gotOpts, s3client, got, ...opts }) {
     super()
     this.Bucket = namespace
     this.ttl = ttl
-    this.hostname = hostname || namespace
-    this.s3client = s3client || new S3Client(opts)
-    this.got = got.extend({
-      ...gotOpts,
-      retry: opts.maxAttempts,
-      timeout: opts.requestHandler
-        ? opts.requestHandler.socketTimeout
-        : undefined
-    })
+    this.hostname = hostname ?? namespace
+    this.s3client = s3client ?? new S3Client(opts)
+    this.got =
+      got ??
+      require('got').extend({
+        ...gotOpts,
+        retry: opts.maxAttempts ?? gotOpts?.retry,
+        timeout: opts.requestHandler?.socketTimeout ?? gotOpts?.timeout
+      })
   }
 
   filename (key) {
