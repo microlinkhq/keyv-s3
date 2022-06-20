@@ -14,8 +14,8 @@ class KeyvS3 extends EventEmitter {
     super()
     this.Bucket = namespace
     this.ttl = ttl
-    this.hostname = hostname ?? namespace
-    this.s3client = s3client ?? new S3Client(opts)
+    this.hostname = hostname != null ? hostname : namespace
+    this.s3client = s3client != null ? s3client : new S3Client(opts)
     this.got =
       got ??
       require('got').extend({
