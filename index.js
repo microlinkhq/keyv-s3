@@ -17,12 +17,13 @@ class KeyvS3 extends EventEmitter {
     this.hostname = hostname != null ? hostname : namespace
     this.s3client = s3client != null ? s3client : new S3Client(opts)
     this.got =
-      got ??
-      require('got').extend({
-        ...gotOpts,
-        retry: opts.maxAttempts ?? gotOpts?.retry,
-        timeout: opts.requestHandler?.socketTimeout ?? gotOpts?.timeout
-      })
+      got != null
+        ? got
+        : require('got').extend({
+          ...gotOpts,
+          retry: opts.maxAttempts ?? gotOpts?.retry,
+          timeout: opts.requestHandler?.socketTimeout ?? gotOpts?.timeout
+        })
   }
 
   filename (key) {
