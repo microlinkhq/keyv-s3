@@ -32,7 +32,7 @@
     "s3"
   ],
   "dependencies": {
-    "got": "~11.8.3",
+    "got": "~12.3.0",
     "p-reflect": "~2.1.0"
   },
   "devDependencies": {
