@@ -6,12 +6,10 @@ const {
   DeleteObjectCommand
 } = require('@aws-sdk/client-s3')
 
-const EventEmitter = require('events')
 const pReflect = require('p-reflect')
 
-class KeyvS3 extends EventEmitter {
+class KeyvS3 {
   constructor ({ namespace, hostname, ttl, gotOpts, s3client, got, ...opts }) {
-    super()
     this.Bucket = namespace
     this.ttl = ttl
     this.hostname = hostname ?? namespace
