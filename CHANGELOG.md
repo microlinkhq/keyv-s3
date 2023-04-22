@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/microlinkhq/keyv-s3/compare/v1.6.6...v2.0.0) (2023-04-22)
+
 ### 1.6.6 (2023-02-24)
 
 ### [1.6.5](https://github.com/microlinkhq/keyv-s3/compare/v1.6.2...v1.6.5) (2022-06-21)
