@@ -1,6 +1,6 @@
 'use strict'
 
-const delay = require('delay')
+const { setTimeout } = require('timers/promises')
 const test = require('ava')
 const got = require('got')
 
@@ -26,7 +26,7 @@ const { keyvB2, keyvS3 } = require('./util')
 
     t.is(!!headers.expires, true)
 
-    await delay(ttl)
+    await setTimeout(ttl)
 
     t.is(await keyv.get(key), undefined)
   })
