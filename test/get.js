@@ -1,6 +1,6 @@
 'use strict'
 
-const delay = require('delay')
+const { setTimeout } = require('timers/promises')
 const test = require('ava')
 
 const { keyvB2, keyvS3 } = require('./util')
@@ -31,7 +31,7 @@ const { keyvB2, keyvS3 } = require('./util')
   test(`${provider} » if key expires, returns undefined`, async t => {
     const ttl = 100
     await keyv.set('foo3', 'bar3', ttl)
-    await delay(ttl)
+    await setTimeout(ttl)
     t.is(await keyv.get('foo3'), undefined)
   })
 })
