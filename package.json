@@ -36,7 +36,7 @@
     "p-reflect": "~2.1.0"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "3.726.1",
+    "@aws-sdk/client-s3": "3.750.0",
     "@commitlint/cli": "latest",
     "@commitlint/config-conventional": "latest",
     "@ksmithut/prettier-standard": "latest",
