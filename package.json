@@ -1,6 +1,6 @@
 {
   "name": "keyv-s3",
-  "description": "Amazon S3 storage adapter for Keyv",
+  "description": "Amazon S3 storage adapter for Keyv — persist cache entries in an S3 bucket.",
   "homepage": "https://github.com/microlinkhq/keyv-s3",
   "version": "2.0.6",
   "types": "index.d.ts",
@@ -24,9 +24,16 @@
     "url": "https://github.com/microlinkhq/keyv-s3/issues"
   },
   "keywords": [
+    "adapter",
     "amazon",
+    "aws",
+    "bucket",
+    "cache",
     "keyv",
-    "s3"
+    "s3",
+    "storage",
+    "store",
+    "ttl"
   ],
   "dependencies": {
     "got": "~11.8.6",
@@ -87,6 +94,7 @@
   },
   "nano-staged": {
     "*.js": [
+      "npx @kikobeats/prettier-standard",
       "standard --fix"
     ],
     "package.json": [
