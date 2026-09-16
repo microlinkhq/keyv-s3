@@ -16,7 +16,7 @@ class KeyvS3 {
     this.s3client = s3client ?? new S3Client(opts)
     this.got =
       got ??
-      require('got').extend({
+      require('@kikobeats/got').extend({
         ...gotOpts,
         retry: opts.maxAttempts ?? gotOpts?.retry,
         timeout: opts.requestHandler?.socketTimeout ?? gotOpts?.timeout

@@ -1,5 +1,5 @@
 import type { S3Client } from '@aws-sdk/client-s3'
-import type Got from 'got'
+import type Got from '@kikobeats/got'
 
 export interface KeyvS3Options {
   namespace: string
