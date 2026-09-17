@@ -2,7 +2,7 @@
   "name": "keyv-s3",
   "description": "Amazon S3 storage adapter for Keyv — persist cache entries in an S3 bucket.",
   "homepage": "https://github.com/microlinkhq/keyv-s3",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "types": "index.d.ts",
   "main": "index.js",
   "author": {
