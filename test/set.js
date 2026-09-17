@@ -1,7 +1,7 @@
 'use strict'
 
 const { setTimeout } = require('timers/promises')
-const test = require('ava')
+const test = require('ava').default
 const got = require('got')
 
 const { keyvB2, keyvS3 } = require('./util')
