@@ -1,11 +1,11 @@
 import type { S3Client } from '@aws-sdk/client-s3'
-import type Got from '@kikobeats/got'
+import type { Got, Options as GotOptions } from '@kikobeats/got'
 
 export interface KeyvS3Options {
   namespace: string
   hostname?: string
   ttl?: number
-  gotOpts?: Got.Options
+  gotOpts?: GotOptions
   s3client?: S3Client
   got?: Got
   maxAttempts?: number
