@@ -8,6 +8,24 @@ const {
 
 const pReflect = require('p-reflect')
 
+const UNSAFE_PATH_CHARACTERS = /[^!$&'()*+,\-./0-9:;=@A-Z[\]_a-z|~]/gu
+const SLASH_AFTER_DOT_SEGMENT = /(?<=(?:^|\/)\.{1,2})\//g
+
+const REPLACEMENT_CHARACTER = '%EF%BF%BD'
+
+const isLoneSurrogate = character =>
+  character.length === 1 && character >= '\ud800' && character <= '\udfff'
+
+const percentEncode = character =>
+  isLoneSurrogate(character)
+    ? REPLACEMENT_CHARACTER
+    : encodeURIComponent(character)
+
+const toUrlPath = objectKey =>
+  objectKey
+    .replace(UNSAFE_PATH_CHARACTERS, percentEncode)
+    .replace(SLASH_AFTER_DOT_SEGMENT, '%2F')
+
 class KeyvS3 {
   constructor ({ namespace, hostname, ttl, gotOpts, s3client, got, ...opts }) {
     this.Bucket = namespace
@@ -29,7 +47,10 @@ class KeyvS3 {
   }
 
   fileUrl (filename) {
-    return new URL(filename, `https://${this.hostname}`).toString()
+    return new URL(
+      `./${toUrlPath(filename)}`,
+      `https://${this.hostname}`
+    ).toString()
   }
 
   async get (key) {
