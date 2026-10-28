@@ -120,7 +120,7 @@ test('every key maps to its own object under the configured host', t => {
     t.is(new URL(fileUrl).href, fileUrl, JSON.stringify(filename))
     t.is(
       objectKeyOf(fileUrl),
-      filename.toWellFormed(),
+      Buffer.from(filename, 'utf8').toString('utf8'),
       JSON.stringify(filename)
     )
   }
