@@ -168,6 +168,143 @@ test('a key reads the object it was written to', async t => {
   }
 })
 
+test('a lone surrogate is percent-encoded as U+FFFD', t => {
+  const { keyv } = createStubbedKeyv()
+  t.is(keyv.fileUrl('a\ud800b.json'), `https://${HOSTNAME}/a%EF%BF%BDb.json`)
+  t.is(
+    keyv.fileUrl('\udfffa\ud800.json'),
+    `https://${HOSTNAME}/%EF%BF%BDa%EF%BF%BD.json`
+  )
+})
+
+const apiObject = (body, { error, expires } = {}) => ({
+  send: async command => {
+    if (error) throw error
+    return {
+      command,
+      Body: {
+        transformToString: async () => JSON.stringify(body)
+      },
+      Expires: expires
+    }
+  }
+})
+
+test('a key one level above the public root is read with the S3 API', async t => {
+  const requests = []
+  const got = async url => {
+    requests.push(url)
+    return { statusCode: 200, headers: {}, body: 'from-url' }
+  }
+  const sent = []
+  const s3client = {
+    send: async command => {
+      sent.push(command.input)
+      return {
+        Body: {
+          transformToString: async () => JSON.stringify('from-api')
+        }
+      }
+    }
+  }
+  const keyv = new KeyvS3({ namespace: HOSTNAME, got, s3client })
+
+  t.is(await keyv.get('../secret'), 'from-api')
+  t.is(await keyv.get('a/../../x'), 'from-api')
+  t.is(await keyv.get('./../secret'), 'from-api')
+  t.deepEqual(
+    sent.map(input => input.Key),
+    ['../secret.json', 'a/../../x.json', './../secret.json']
+  )
+  t.true(sent.every(input => input.Bucket === HOSTNAME))
+  t.is(requests.length, 0)
+
+  await keyv.get('a/../b')
+  await keyv.get('a/b/../../x')
+  await keyv.get('../../x')
+  t.deepEqual(requests, [
+    `https://${HOSTNAME}/a/..%2Fb.json`,
+    `https://${HOSTNAME}/a/b/..%2F..%2Fx.json`,
+    `https://${HOSTNAME}/..%2F..%2Fx.json`
+  ])
+})
+
+test('an API read misses when the object is absent or expired', async t => {
+  const absent = new KeyvS3({
+    namespace: HOSTNAME,
+    got: async () => {
+      throw new Error('public url should not be used')
+    },
+    s3client: apiObject(null, {
+      error: Object.assign(new Error('missing'), { name: 'NoSuchKey' })
+    })
+  })
+  t.is(await absent.get('../secret'), undefined)
+
+  const forbidden = new KeyvS3({
+    namespace: HOSTNAME,
+    got: async () => {
+      throw new Error('public url should not be used')
+    },
+    s3client: apiObject(null, {
+      error: Object.assign(new Error('denied'), {
+        name: 'AccessDenied',
+        $metadata: { httpStatusCode: 403 }
+      })
+    })
+  })
+  t.is(await forbidden.get('../secret'), undefined)
+
+  for (const statusCode of [404, 520, 530]) {
+    const missed = new KeyvS3({
+      namespace: HOSTNAME,
+      got: async () => {
+        throw new Error('public url should not be used')
+      },
+      s3client: apiObject(null, {
+        error: Object.assign(new Error('miss'), {
+          name: 'NotFound',
+          $metadata: { httpStatusCode: statusCode }
+        })
+      })
+    })
+    t.is(await missed.get('../secret'), undefined, String(statusCode))
+  }
+
+  const expired = new KeyvS3({
+    namespace: HOSTNAME,
+    got: async () => {
+      throw new Error('public url should not be used')
+    },
+    s3client: apiObject('stale', { expires: new Date(0) })
+  })
+  t.is(await expired.get('../secret'), undefined)
+
+  const fresh = new KeyvS3({
+    namespace: HOSTNAME,
+    got: async () => {
+      throw new Error('public url should not be used')
+    },
+    s3client: apiObject('fresh', { expires: new Date(Date.now() + 60_000) })
+  })
+  t.is(await fresh.get('../secret'), 'fresh')
+})
+
+test('an API read failure other than a miss is thrown', async t => {
+  const keyv = new KeyvS3({
+    namespace: HOSTNAME,
+    got: async () => {
+      throw new Error('public url should not be used')
+    },
+    s3client: apiObject(null, {
+      error: Object.assign(new Error('boom'), {
+        $metadata: { httpStatusCode: 500 }
+      })
+    })
+  })
+  await t.throwsAsync(keyv.get('../secret'), { message: 'boom' })
+})
+
 test('a key stays under the base path of the hostname', t => {
   for (const hostname of [
     'f000.backblazeb2.com/file/bucket/',

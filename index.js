@@ -3,7 +3,8 @@
 const {
   S3Client,
   PutObjectCommand,
-  DeleteObjectCommand
+  DeleteObjectCommand,
+  GetObjectCommand
 } = require('@aws-sdk/client-s3')
 
 const pReflect = require('p-reflect')
@@ -25,6 +26,50 @@ const toUrlPath = objectKey =>
   objectKey
     .replace(UNSAFE_PATH_CHARACTERS, percentEncode)
     .replace(SLASH_AFTER_DOT_SEGMENT, '%2F')
+
+const MISSING_STATUS_CODES = [403, 404, 520, 530]
+
+// How many ".." segments climb above the decoded path root.
+// "." and empty segments do not count: S3 treats them the same way.
+const rootEscapeDepth = pathname => {
+  let depth = 0
+  let escaped = 0
+  for (const segment of decodeURIComponent(pathname).split('/')) {
+    if (segment === '' || segment === '.') continue
+    depth += segment === '..' ? -1 : 1
+    if (depth < 0) escaped = Math.max(escaped, -depth)
+  }
+  return escaped
+}
+
+const readApiObject = async (client, bucket, filename) => {
+  const { value, reason, isRejected } = await pReflect(
+    client.send(
+      new GetObjectCommand({
+        Bucket: bucket,
+        Key: filename
+      })
+    )
+  )
+
+  if (isRejected) {
+    const statusCode = reason.$metadata?.httpStatusCode
+    if (
+      reason.name === 'NoSuchKey' ||
+      MISSING_STATUS_CODES.includes(statusCode)
+    ) {
+      return undefined
+    }
+    throw reason
+  }
+
+  const body = JSON.parse(await value.Body.transformToString())
+  const expires = value.Expires
+    ? new Date(value.Expires).getTime()
+    : Number.POSITIVE_INFINITY
+
+  return Date.now() <= expires ? body : undefined
+}
 
 class KeyvS3 {
   constructor ({ namespace, hostname, ttl, gotOpts, s3client, got, ...opts }) {
@@ -54,15 +99,24 @@ class KeyvS3 {
   }
 
   async get (key) {
+    const filename = this.filename(key)
+    const fileUrl = this.fileUrl(filename)
+    // Path-style writes keep the bucket as a leading segment, so a key that
+    // climbs one level above the public root is still stored. The public URL
+    // has no bucket segment, and S3 rejects it with 400.
+    if (rootEscapeDepth(new URL(fileUrl).pathname) === 1) {
+      return readApiObject(this.s3client, this.Bucket, filename)
+    }
+
     const { value, reason, isRejected } = await pReflect(
-      this.got(this.fileUrl(this.filename(key)), {
+      this.got(fileUrl, {
         responseType: 'json'
       })
     )
 
     if (isRejected) {
       if (reason.response) {
-        if ([403, 404, 520, 530].includes(reason.response.statusCode)) {
+        if (MISSING_STATUS_CODES.includes(reason.response.statusCode)) {
           return undefined
         }
       }
