@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.0.9 (2026-10-29)
+
+
+### Bug Fixes
+
+* declare the real minimum Node.js version ([#55](https://github.com/microlinkhq/keyv-s3/issues/55)) ([78d449a](https://github.com/microlinkhq/keyv-s3/commit/78d449a7978b3fd3a7ded69f8168900b8ccb42e0))
+
 ### 2.0.8 (2026-09-17)
 
 
