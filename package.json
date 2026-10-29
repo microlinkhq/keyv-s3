@@ -56,9 +56,6 @@
     "standard-version": "latest",
     "typescript": "latest"
   },
-  "peerDependencies": {
-    "@aws-sdk/client-s3": "^3.0.0"
-  },
   "engines": {
     "node": ">= 10"
   },
@@ -106,6 +103,9 @@
     "package.json": [
       "finepack"
     ]
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-s3": "^3.0.0"
   },
   "simple-git-hooks": {
     "commit-msg": "npx commitlint --edit",
