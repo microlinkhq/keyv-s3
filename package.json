@@ -60,7 +60,7 @@
     "@aws-sdk/client-s3": "^3.0.0"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">= 18"
   },
   "files": [
     "index.d.ts",
